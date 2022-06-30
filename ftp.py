@@ -10,14 +10,19 @@ from ftplib import FTP
 
 class FTP_Client:
     def __init__(self):
+        self.ftp = None
+
+    def login(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
+        with FTP(host) as ftp:
+            self.ftp = ftp
+            self.ftp.login(user=user, passwd=password)
+            print(self.ftp.getwelcome())
+
+    def list_directories_and_files(self):
         pass
 
-
-
-    def connect(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
-        with FTP(host) as ftp:
-            ftp.login(user=user, passwd=password)
-            print(ftp.getwelcome())
+    def get_file(self):
+        pass
 
 
 
@@ -27,6 +32,6 @@ if __name__ == "__main__":
     print('====================================================')
 
     ftp = FTP_Client()
-    ftp.connect()
+    ftp.login()
 
 
