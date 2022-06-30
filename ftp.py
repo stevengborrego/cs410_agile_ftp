@@ -7,7 +7,6 @@ Steven Borrego
 """
 
 from ftplib import FTP
-import pyftpdlib
 
 class FTP_Client:
     def __init__(self):
@@ -15,7 +14,7 @@ class FTP_Client:
 
 
 
-    def connect(self, host='ftpupload.net', user='epiz_32073599', password='UMDmFiWWBp'):
+    def connect(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
         with FTP(host) as ftp:
             ftp.login(user=user, passwd=password)
             print(ftp.getwelcome())
