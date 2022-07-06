@@ -12,18 +12,54 @@ class FTP_Client:
     def __init__(self):
         self.ftp = None
 
-    def login(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
-        with FTP(host) as ftp:
-            self.ftp = ftp
-            self.ftp.login(user=user, passwd=password)
-            print(self.ftp.getwelcome())
-
     def list_directories_and_files(self):
-        pass
+        self.ftp.dir()
 
     def get_file(self):
         pass
 
+    def log_off(self):
+        self.ftp.quit()
+        print('You are now logged off')
+
+    def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
+        # host = input('Enter hostname: ')
+        # user = input('Enter username: ')
+        # password = input('Enter password: ')
+
+        options = {'0': self.list_directories_and_files,
+                   '1': self.get_file,
+                   '2': self.log_off, }
+
+        with FTP(host) as ftp:
+            self.ftp = ftp
+            try:
+                self.ftp.login(user=user, passwd=password)
+                print(self.ftp.getwelcome())
+
+            except:
+                print("Please enter valid credentials")
+
+            print('\n========== FTP Client ==========\n')
+            print('0: List remote directories and files')
+            print('1: Get file from remote server')
+            print('2: Log off from remote server')
+            # print('3: Get multiple files from remote server')
+            # print('4: List directories and files on local machine')
+            # print('5: Put file onto remote server')
+            # print('6: Create directory on remote server')
+            # print('7: Delete file from remote server')
+            # print('8: Change permissions on remove server')
+            # print('9: Copy directories on remote server')
+            # print('10: Delete directories on remote server')
+            # print('11: Save connection information')
+
+            selection = input('\nPlease make a selection: ')
+
+            if selection in options.keys():
+                options[selection]()
+            else:
+                print('please make a valid selection')
 
 
 if __name__ == "__main__":
@@ -32,6 +68,4 @@ if __name__ == "__main__":
     print('====================================================')
 
     ftp = FTP_Client()
-    ftp.login()
-
-
+    ftp.menu()
