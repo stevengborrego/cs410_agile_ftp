@@ -16,7 +16,16 @@ class FTP_Client:
         self.ftp.dir()
 
     def get_file(self):
-        pass
+        fileName = input("Enter file name: ")
+
+        localFile = open(fileName, 'wb')
+        self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
+
+        localFile.close()
+
+    def put_file(self):
+        fileName = input("Enter file name: ")
+        self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
 
     def log_off(self):
         self.ftp.quit()
@@ -29,7 +38,8 @@ class FTP_Client:
 
         options = {'0': self.list_directories_and_files,
                    '1': self.get_file,
-                   '2': self.log_off,}
+                   '2': self.log_off,
+                   '5': self.put_file,}
 
         with FTP(host) as ftp:
             self.ftp = ftp
@@ -48,7 +58,7 @@ class FTP_Client:
                 print('2: Log off from remote server')
                 # print('3: Get multiple files from remote server')
                 # print('4: List directories and files on local machine')
-                # print('5: Put file onto remote server')
+                print('5: Put file onto remote server')
                 # print('6: Create directory on remote server')
                 # print('7: Delete file from remote server')
                 # print('8: Change permissions on remove server')
