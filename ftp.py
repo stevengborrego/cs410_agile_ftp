@@ -2,6 +2,7 @@
 
 Team Members:
 Steven Borrego
+Storm Crozier
 
 
 """
@@ -27,6 +28,10 @@ class FTP_Client:
         fileName = input("Enter file name: ")
         self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
 
+    def delete_file(self):
+        fileName = input("Enter file name: ")
+        print(self.ftp.delete(fileName))
+
     def log_off(self):
         self.ftp.quit()
         print('You are now logged off')
@@ -39,7 +44,8 @@ class FTP_Client:
         options = {'0': self.list_directories_and_files,
                    '1': self.get_file,
                    '2': self.log_off,
-                   '5': self.put_file,}
+                   '5': self.put_file,
+                   '7': self.delete_file,}
 
         with FTP(host) as ftp:
             self.ftp = ftp
@@ -60,7 +66,7 @@ class FTP_Client:
                 # print('4: List directories and files on local machine')
                 print('5: Put file onto remote server')
                 # print('6: Create directory on remote server')
-                # print('7: Delete file from remote server')
+                print('7: Delete file from remote server')
                 # print('8: Change permissions on remove server')
                 # print('9: Copy directories on remote server')
                 # print('10: Delete directories on remote server')
