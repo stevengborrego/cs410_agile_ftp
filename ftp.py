@@ -9,6 +9,8 @@ Storm Crozier
 
 from ftplib import FTP
 
+from numpy import append, array
+
 class FTP_Client:
     def __init__(self):
         self.ftp = None
@@ -23,6 +25,21 @@ class FTP_Client:
         self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
 
         localFile.close()
+
+    def get_mul_files(self):
+        
+        list = input("\nEnter files seperated by space: ")
+        
+        arr = list.split(" ")
+
+        print(arr)
+
+        files = self.ftp.nlst(arr)
+
+        for file in files:
+            self.ftp.retrbinary("RETR "+file, open(file, 'wb').write)
+        
+        self.ftp.close
 
     def put_file(self):
         fileName = input("Enter file name: ")
@@ -44,6 +61,7 @@ class FTP_Client:
         options = {'0': self.list_directories_and_files,
                    '1': self.get_file,
                    '2': self.log_off,
+                   '3': self.get_mul_files,
                    '5': self.put_file,
                    '7': self.delete_file,}
 
@@ -62,7 +80,7 @@ class FTP_Client:
                 print('0: List remote directories and files')
                 print('1: Get file from remote server')
                 print('2: Log off from remote server')
-                # print('3: Get multiple files from remote server')
+                print('3: Get multiple files from remote server')
                 # print('4: List directories and files on local machine')
                 print('5: Put file onto remote server')
                 # print('6: Create directory on remote server')
