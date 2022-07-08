@@ -30,11 +30,7 @@ class FTP_Client:
         
         list = input("\nEnter files seperated by space: ")
         
-        arr = list.split(" ")
-
-        print(arr)
-
-        files = self.ftp.nlst(arr)
+        files = list.split(" ")
 
         for file in files:
             self.ftp.retrbinary("RETR "+file, open(file, 'wb').write)
