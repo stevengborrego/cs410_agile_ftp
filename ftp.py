@@ -11,6 +11,8 @@ from ftplib import FTP
 
 from numpy import append, array
 
+import os
+
 class FTP_Client:
     def __init__(self):
         self.ftp = None
@@ -34,8 +36,11 @@ class FTP_Client:
 
         for file in files:
             self.ftp.retrbinary("RETR "+file, open(file, 'wb').write)
-        
         self.ftp.close
+
+    def local_dir_and_files(self):
+        files = os.listdir(os.curdir)
+        print (files)
 
     def put_file(self):
         fileName = input("Enter file name: ")
@@ -58,6 +63,7 @@ class FTP_Client:
                    '1': self.get_file,
                    '2': self.log_off,
                    '3': self.get_mul_files,
+                   '4': self.local_dir_and_files,
                    '5': self.put_file,
                    '7': self.delete_file,}
 
@@ -77,7 +83,7 @@ class FTP_Client:
                 print('1: Get file from remote server')
                 print('2: Log off from remote server')
                 print('3: Get multiple files from remote server')
-                # print('4: List directories and files on local machine')
+                print('4: List directories and files on local machine')
                 print('5: Put file onto remote server')
                 # print('6: Create directory on remote server')
                 print('7: Delete file from remote server')
