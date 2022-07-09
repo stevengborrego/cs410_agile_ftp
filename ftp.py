@@ -46,6 +46,13 @@ class FTP_Client:
         fileName = input("Enter file name: ")
         self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
 
+    def create_dir(self):
+
+        dir = input("\nEnter directory name to create: ")
+        path = self.ftp.pwd()
+
+        self.ftp.mkd(path + dir)
+
     def delete_file(self):
         fileName = input("Enter file name: ")
         print(self.ftp.delete(fileName))
@@ -65,6 +72,7 @@ class FTP_Client:
                    '3': self.get_mul_files,
                    '4': self.local_dir_and_files,
                    '5': self.put_file,
+                   '6': self.create_dir,
                    '7': self.delete_file,}
 
         with FTP(host) as ftp:
@@ -85,7 +93,7 @@ class FTP_Client:
                 print('3: Get multiple files from remote server')
                 print('4: List directories and files on local machine')
                 print('5: Put file onto remote server')
-                # print('6: Create directory on remote server')
+                print('6: Create directory on remote server')
                 print('7: Delete file from remote server')
                 # print('8: Change permissions on remove server')
                 # print('9: Copy directories on remote server')
