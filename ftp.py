@@ -30,7 +30,7 @@ class FTP_Client:
 
     def get_mul_files(self):
         
-        list = input("\nEnter files seperated by space: ")
+        list = input("\nEnter files' name seperated by space: ")
         
         files = list.split(" ")
 
@@ -58,6 +58,37 @@ class FTP_Client:
 
         self.ftp.rmd(path + dir)
 
+    def copy_dir(self, dir:str):
+        local_path = os.getcwd()
+        remote_path = self.ftp.pwd()
+
+        #dir = input("\nEnter directory name to copy: ")
+
+        #cd to dir on remote server 
+        self.ftp.cwd(remote_path + dir)
+        
+        #create dir with same name on local machine and cd into it
+        new_local_path = os.path.join(local_path, dir)
+        os.mkdir(new_local_path)
+        os.chdir(new_local_path)
+
+
+        files = self.ftp.nlst()
+        for file in files:
+            self.ftp.retrbinary("RETR "+file, open(file[1:], 'wb').write)
+        self.ftp.close
+            
+    def copy_directories(self):
+        self.list_directories_and_files()
+        list = input("\nEnter directories' name seperated by space: ")
+        
+        directories = list.split(" ")
+
+        for dir in directories:
+            self.copy_dir(dir)
+        self.ftp.close
+
+
     def delete_file(self):
         fileName = input("Enter file name: ")
         print(self.ftp.delete(fileName))
@@ -79,6 +110,7 @@ class FTP_Client:
                    '5': self.put_file,
                    '6': self.create_dir,
                    '7': self.delete_file,
+                   '9': self.copy_directories,
                    '10': self.delete_dir,}
 
         with FTP(host) as ftp:
@@ -102,7 +134,7 @@ class FTP_Client:
                 print('6: Create directory on remote server')
                 print('7: Delete file from remote server')
                 # print('8: Change permissions on remove server')
-                # print('9: Copy directories on remote server')
+                print('9: Copy directories on remote server')
                 print('10: Delete directories on remote server')
                 # print('11: Save connection information')
 
