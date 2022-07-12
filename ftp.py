@@ -3,14 +3,11 @@
 Team Members:
 Steven Borrego
 Storm Crozier
-Lakshmi Yalamarthi
+
 
 """
 
 from ftplib import FTP
-import tkinter
-from tkinter import Label
-import psutil
 
 from numpy import append, array
 
@@ -32,9 +29,9 @@ class FTP_Client:
         localFile.close()
 
     def get_mul_files(self):
-        
+
         list = input("\nEnter files' name seperated by space: ")
-        
+
         files = list.split(" ")
 
         for file in files:
@@ -67,9 +64,9 @@ class FTP_Client:
 
         #dir = input("\nEnter directory name to copy: ")
 
-        #cd to dir on remote server 
+        #cd to dir on remote server
         self.ftp.cwd(remote_path + dir)
-        
+
         #create dir with same name on local machine and cd into it
         new_local_path = os.path.join(local_path, dir)
         os.mkdir(new_local_path)
@@ -80,11 +77,11 @@ class FTP_Client:
         for file in files:
             self.ftp.retrbinary("RETR "+file, open(file[1:], 'wb').write)
         self.ftp.close
-            
+
     def copy_directories(self):
         self.list_directories_and_files()
         list = input("\nEnter directories' name seperated by space: ")
-        
+
         directories = list.split(" ")
 
         for dir in directories:
@@ -100,34 +97,10 @@ class FTP_Client:
         self.ftp.quit()
         print('You are now logged off')
 
-    def get_available_memory(self):
-        self.login()
-        print("CPU utilised ", psutil.cpu_percent(2))
-        available = round((psutil.virtual_memory()[1] / (1024.0 ** 3)), 2)
-        Used = round((psutil.virtual_memory()[3] / (1024.0 ** 3)), 2)
-        text_gui_msg.insert(tkinter.END, "Available Memory : ")
-        text_gui_msg.insert(tkinter.END, available)
-        text_gui_msg.insert(tkinter.END," GB \n")
-        text_gui_msg.insert(tkinter.END, "Used Memory : ")
-        text_gui_msg.insert(tkinter.END, Used)
-        text_gui_msg.insert(tkinter.END, " GB \n")
-
-
-    def login(self,host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
-        with FTP(host) as ftp:
-            self.ftp = ftp
-            try:
-                self.ftp.login(user=user,passwd=password)
-            except:
-                print("Please enter valid credentials ")
-
-
-
     def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
         # host = input('Enter hostname: ')
         # user = input('Enter username: ')
         # password = input('Enter password: ')
-
 
         options = {'0': self.list_directories_and_files,
                    '1': self.get_file,
@@ -145,10 +118,9 @@ class FTP_Client:
             try:
                 self.ftp.login(user=user, passwd=password)
                 print(self.ftp.getwelcome())
-                # self.ftp.source_address()
 
             except:
-                print("Please enter valid credentials ")
+                print("Please enter valid credentials")
 
             selection = ''
             while(selection != '2'):
@@ -180,14 +152,4 @@ if __name__ == "__main__":
     print('====================================================')
 
     ftp = FTP_Client()
-    # ftp.menu()
-    gui_window = tkinter.Tk()
-
-    gui_window.title("FTP_Client_410")
-    gui_window.wm_iconbitmap("favicon.ico")
-    gui_window.geometry("1000x600")
-    text_gui_msg = tkinter.Text(gui_window, height = 10, width = 36, bg= "light cyan")
-
-    ftp_ip = tkinter.Label(gui_window, command = ftp.get_available_memory())
-    text_gui_msg.pack()
-    gui_window.mainloop()
+    ftp.menu()
