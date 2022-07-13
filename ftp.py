@@ -29,9 +29,9 @@ class FTP_Client:
         localFile.close()
 
     def get_mul_files(self):
-        
+
         list = input("\nEnter files' name seperated by space: ")
-        
+
         files = list.split(" ")
 
         for file in files:
@@ -64,9 +64,9 @@ class FTP_Client:
 
         #dir = input("\nEnter directory name to copy: ")
 
-        #cd to dir on remote server 
+        #cd to dir on remote server
         self.ftp.cwd(remote_path + dir)
-        
+
         #create dir with same name on local machine and cd into it
         new_local_path = os.path.join(local_path, dir)
         os.mkdir(new_local_path)
@@ -77,11 +77,11 @@ class FTP_Client:
         for file in files:
             self.ftp.retrbinary("RETR "+file, open(file[1:], 'wb').write)
         self.ftp.close
-            
+
     def copy_directories(self):
         self.list_directories_and_files()
         list = input("\nEnter directories' name seperated by space: ")
-        
+
         directories = list.split(" ")
 
         for dir in directories:
