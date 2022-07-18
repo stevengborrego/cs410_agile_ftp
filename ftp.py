@@ -88,6 +88,16 @@ class FTP_Client:
             self.copy_dir(dir)
         self.ftp.close
 
+    def rename_file_remote(self):
+        fromName = input("Enter name of file you want to change: ")
+        toName = input("Enter new name of file: ")
+        self.ftp.rename(fromName, toName)
+
+    def rename_file_local(self):
+        fromName = input("Enter name of file you want to change: ")
+        toName = input("Enter new name of file: ")
+        os.rename(fromName, toName)
+ 
 
     def delete_file(self):
         fileName = input("Enter file name: ")
@@ -111,7 +121,9 @@ class FTP_Client:
                    '6': self.create_dir,
                    '7': self.delete_file,
                    '9': self.copy_directories,
-                   '10': self.delete_dir,}
+                   '10': self.delete_dir,
+                   '12': self.rename_file_remote,
+                   '13': self.rename_file_local,}
 
         with FTP(host) as ftp:
             self.ftp = ftp
@@ -137,6 +149,8 @@ class FTP_Client:
                 print('9: Copy directories on remote server')
                 print('10: Delete directories on remote server')
                 # print('11: Save connection information')
+                print('12: Rename file on remote server')
+                print('13: Rename local file')
 
                 selection = input('\nPlease make a selection: ')
 
