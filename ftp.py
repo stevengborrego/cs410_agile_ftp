@@ -3,6 +3,7 @@
 Team Members:
 Steven Borrego
 Storm Crozier
+Lakshmi Yalamarthi
 
 
 """
@@ -12,6 +13,7 @@ from ftplib import FTP
 from numpy import append, array
 
 import os
+import  socket
 
 class FTP_Client:
     def __init__(self):
@@ -97,7 +99,15 @@ class FTP_Client:
         fromName = input("Enter name of file you want to change: ")
         toName = input("Enter new name of file: ")
         os.rename(fromName, toName)
- 
+
+    def upload_multiple_files(self):
+        dir = input("Enter Directory path for files you want to upload : ")
+        files = os.listdir(dir)
+        print(files)
+        for filename in files:
+            opened_file = open(dir + filename, 'rb')
+            self.ftp.storbinary('STOR '+ filename, opened_file)
+            opened_file.close()
 
     def delete_file(self):
         fileName = input("Enter file name: ")
@@ -123,7 +133,9 @@ class FTP_Client:
                    '9': self.copy_directories,
                    '10': self.delete_dir,
                    '12': self.rename_file_remote,
-                   '13': self.rename_file_local,}
+                   '13': self.rename_file_local,
+                   '14': self.upload_multiple_files,
+                   }
 
         with FTP(host) as ftp:
             self.ftp = ftp
@@ -151,6 +163,7 @@ class FTP_Client:
                 # print('11: Save connection information')
                 print('12: Rename file on remote server')
                 print('13: Rename local file')
+                print('14: Upload multiple files to remote server')
 
                 selection = input('\nPlease make a selection: ')
 
