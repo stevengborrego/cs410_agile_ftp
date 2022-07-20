@@ -14,6 +14,7 @@ from numpy import append, array
 
 import os
 import  socket
+import psutil
 
 class FTP_Client:
     def __init__(self):
@@ -64,6 +65,7 @@ class FTP_Client:
         local_path = os.getcwd()
         remote_path = self.ftp.pwd()
 
+
         #dir = input("\nEnter directory name to copy: ")
 
         #cd to dir on remote server
@@ -109,6 +111,29 @@ class FTP_Client:
             self.ftp.storbinary('STOR '+ filename, opened_file)
             opened_file.close()
 
+    def session_details_for_update(self):
+        file = "session.txt"
+        f = open(file, "w")
+        count = 0
+        files = ""
+        for file in self.ftp.nlst():
+            files = files + ", " + file
+            count += 1
+        ip = socket.gethostbyname("ftp.epizy.com")
+        session = self.ftp.getwelcome()
+        user = session.split("user number ")[1].split(" ")[0]
+        port = session.split("Server port:")[1].split(".")[0]
+        localtime = session.split("is now")[1].split(".")[0]
+        mem = round((psutil.virtual_memory()[1] / (1024.0 ** 3)), 2)
+        f.write("Update in session, stats before the update : \n" + "IP address : " + ip + "\n" +
+                "Number of files in server : " + str(count) + "\n" +
+                "List of files in the server before this update : " + files + "\n" +
+                "User id : " + user + "\nServer Port : " + port + "\n" +
+                "Local time in the server : " + localtime + "\n" +
+                "Available memory : " + str(mem) + " Gb \n"
+                )
+        f.close()
+
     def delete_file(self):
         fileName = input("Enter file name: ")
         print(self.ftp.delete(fileName))
@@ -135,6 +160,7 @@ class FTP_Client:
                    '12': self.rename_file_remote,
                    '13': self.rename_file_local,
                    '14': self.upload_multiple_files,
+                   '15': self.session_details_for_update
                    }
 
         with FTP(host) as ftp:
@@ -164,6 +190,7 @@ class FTP_Client:
                 print('12: Rename file on remote server')
                 print('13: Rename local file')
                 print('14: Upload multiple files to remote server')
+                print('15: saving server details to file before update')
 
                 selection = input('\nPlease make a selection: ')
 
