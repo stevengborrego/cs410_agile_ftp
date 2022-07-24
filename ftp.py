@@ -28,6 +28,13 @@ class FTP_Client:
 
         localFile.close()
 
+    def get_file(self, fileName):
+
+        localFile = open(fileName, 'wb')
+        self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
+
+        localFile.close()
+
     def get_mul_files(self):
 
         list = input("\nEnter files' name seperated by space: ")
