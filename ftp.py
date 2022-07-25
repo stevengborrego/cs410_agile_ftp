@@ -23,95 +23,127 @@ class FTP_Client:
         self.ftp.dir()
 
     def get_file(self):
-        fileName = input("Enter file name: ")
+        try:
+            fileName = input("Enter file name: ")
 
-        localFile = open(fileName, 'wb')
-        self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
+            localFile = open(fileName, 'wb')
+            self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
 
-        localFile.close()
+            localFile.close()
+        except:
+            print('Please enter a valid file path.')
 
     def get_mul_files(self):
+        try:
+            list = input("\nEnter files' name separated by space: ")
 
-        list = input("\nEnter files' name seperated by space: ")
+            files = list.split(" ")
 
-        files = list.split(" ")
-
-        for file in files:
-            self.ftp.retrbinary("RETR "+file, open(file, 'wb').write)
-        self.ftp.close
+            for file in files:
+                self.ftp.retrbinary("RETR "+file, open(file, 'wb').write)
+            self.ftp.close
+        except:
+            print('Please enter valid file paths.')
 
     def local_dir_and_files(self):
         files = os.listdir(os.curdir)
         print (files)
 
     def put_file(self):
-        fileName = input("Enter file name: ")
-        self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
+        try:
+            fileName = input("Enter file name: ")
+            self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
+        except:
+            print('Please enter a valid file path.')
 
     def create_dir(self):
-        dir = input("\nEnter directory name to create: ")
-        path = self.ftp.pwd()
+        try:
+            dir = input("\nEnter directory name to create: ")
+            path = self.ftp.pwd()
 
-        self.ftp.mkd(path + dir)
+            self.ftp.mkd(path + dir)
+        except:
+            print('Please enter a valid directory path.')
 
     def delete_dir(self):
-        dir = input("\nEnter directory name to delete: ")
-        path = self.ftp.pwd()
+        try:
+            dir = input("\nEnter directory name to delete: ")
+            path = self.ftp.pwd()
 
-        self.ftp.rmd(path + dir)
+            self.ftp.rmd(path + dir)
+        except:
+            print('Please enter a valid directory path.')
 
     def copy_dir(self, dir:str):
-        local_path = os.getcwd()
-        remote_path = self.ftp.pwd()
+        try:
+            local_path = os.getcwd()
+            remote_path = self.ftp.pwd()
 
-        #dir = input("\nEnter directory name to copy: ")
+            #dir = input("\nEnter directory name to copy: ")
 
-        #cd to dir on remote server
-        self.ftp.cwd(remote_path + dir)
+            #cd to dir on remote server
+            self.ftp.cwd(remote_path + dir)
 
-        #create dir with same name on local machine and cd into it
-        new_local_path = os.path.join(local_path, dir)
-        os.mkdir(new_local_path)
-        os.chdir(new_local_path)
+            #create dir with same name on local machine and cd into it
+            new_local_path = os.path.join(local_path, dir)
+            os.mkdir(new_local_path)
+            os.chdir(new_local_path)
 
 
-        files = self.ftp.nlst()
-        for file in files:
-            self.ftp.retrbinary("RETR "+file, open(file[1:], 'wb').write)
-        self.ftp.close
+            files = self.ftp.nlst()
+            for file in files:
+                self.ftp.retrbinary("RETR "+file, open(file[1:], 'wb').write)
+            self.ftp.close
+        except:
+            print('error')
 
     def copy_directories(self):
-        self.list_directories_and_files()
-        list = input("\nEnter directories' name seperated by space: ")
+        try:
+            self.list_directories_and_files()
+            list = input("\nEnter directories' name seperated by space: ")
 
-        directories = list.split(" ")
+            directories = list.split(" ")
 
-        for dir in directories:
-            self.copy_dir(dir)
-        self.ftp.close
+            for dir in directories:
+                self.copy_dir(dir)
+            self.ftp.close
+        except:
+            print('Please enter valid directory paths.')
 
     def rename_file_remote(self):
-        fromName = input("Enter name of file you want to change: ")
-        toName = input("Enter new name of file: ")
-        self.ftp.rename(fromName, toName)
+        try:
+            fromName = input("Enter name of file you want to change: ")
+            toName = input("Enter new name of file: ")
+            self.ftp.rename(fromName, toName)
+        except:
+            print('Please enter valid file paths.')
 
     def rename_file_local(self):
-        fromName = input("Enter name of file you want to change: ")
-        toName = input("Enter new name of file: ")
-        os.rename(fromName, toName)
+        try:
+            fromName = input("Enter name of file you want to change: ")
+            toName = input("Enter new name of file: ")
+            os.rename(fromName, toName)
+        except:
+            print('Please enter valid file paths.')
 
     def upload_multiple_files(self):
-        dir = input("Enter Directory path for files you want to upload : ")
-        files = os.listdir(dir)
-        print(files)
-        for filename in files:
-            opened_file = open(dir + filename, 'rb')
-            self.ftp.storbinary('STOR '+ filename, opened_file)
-            opened_file.close()
+        try:
+            dir = input("Enter Directory path for files you want to upload : ")
+            files = os.listdir(dir)
+            print(files)
+            for filename in files:
+                opened_file = open(dir + filename, 'rb')
+                self.ftp.storbinary('STOR '+ filename, opened_file)
+                opened_file.close()
+        except:
+            print('Please enter valid file paths.')
 
     def delete_file(self):
-        fileName = input("Enter file name: ")
-        print(self.ftp.delete(fileName))
+        try:
+            fileName = input("Enter file name: ")
+            print(self.ftp.delete(fileName))
+        except:
+            print('Please enter valid file path.')
 
     def log_off(self):
         self.ftp.quit()
