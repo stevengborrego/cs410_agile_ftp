@@ -80,12 +80,12 @@ class FTP_Client:
             local_path = os.getcwd()
             remote_path = self.ftp.pwd()
 
-<<<<<<< HEAD
-            #dir = input("\nEnter directory name to copy: ")
-=======
 
-        #dir = input("\nEnter directory name to copy: ")
->>>>>>> a758ca6dcfb69362b1971cf00b240bd37c141041
+            #dir = input("\nEnter directory name to copy: ")
+
+
+            #dir = input("\nEnter directory name to copy: ")
+
 
             #cd to dir on remote server
             self.ftp.cwd(remote_path + dir)
