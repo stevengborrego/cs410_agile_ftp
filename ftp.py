@@ -24,12 +24,15 @@ class FTP_Client:
         self.ftp.dir()
 
     def get_file(self):
+        try:
             fileName = input("Enter file name: ")
 
             localFile = open(fileName, 'wb')
             self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
 
             localFile.close()
+        except:
+            print('Please enter valid file path.')
 
     def get_mul_files(self):
         try:
