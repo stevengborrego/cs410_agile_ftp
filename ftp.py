@@ -4,7 +4,7 @@ Team Members:
 Steven Borrego
 Storm Crozier
 Lakshmi Yalamarthi
-
+Minh Tran
 
 """
 
