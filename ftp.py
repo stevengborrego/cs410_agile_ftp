@@ -235,7 +235,8 @@ class FTP_Client:
         loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
 
         if (loadInfo == ""):
-            if (file_exists = os.path.exists('readme.txt') == True):
+            file_exists = os.path.exists('readme.txt')
+            if (file_exists == True):
                 loginInfo = self.load_info()
                 host = loginInfo[0]
                 user = loginInfo[1]
