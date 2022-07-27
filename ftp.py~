@@ -5,7 +5,6 @@ Steven Borrego
 Storm Crozier
 Lakshmi Yalamarthi
 Minh Tran
-Dawson Shay
 
 """
 
@@ -14,11 +13,8 @@ from ftplib import FTP
 from numpy import append, array
 
 import os
-import socket
+import  socket
 import psutil
-import sys
-import difflib
-
 
 class FTP_Client:
     def __init__(self):
@@ -37,13 +33,6 @@ class FTP_Client:
             localFile.close()
         except:
             print('Please enter valid file path.')
-
-    def get_file(self, fileName):
-
-        localFile = open(fileName, 'wb')
-        self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
-
-        localFile.close()
 
     def get_mul_files(self):
         try:
@@ -85,20 +74,6 @@ class FTP_Client:
             self.ftp.rmd(path + dir)
         except:
             print('Please enter a valid directory path.')
-
-
-    def save_info(self, loginInfo): 
-        saveInfo = map(lambda x: x + '\n', loginInfo) # format info as newline seperated array 
-        with open("connect.txt","w") as f: # 'w' mode so it overwrites each time new info is saved
-            f.writelines(saveInfo)
-        f.close()
-
-    def load_info(self):
-        loginInfo = []
-        with open("connect.txt") as f:
-            for line in f:
-                loginInfo.append(line.strip()) # remove newlines
-        return loginInfo
 
     def copy_dir(self, dir:str):
         try:
@@ -199,67 +174,14 @@ class FTP_Client:
         except:
             print('Please enter valid file path.')
 
-    def change_permission(self):
-        fileName = input("Enter file name: ")
-        desiredPermission = input("Enter desired permission: ")
-        print(self.ftp.sendcmd('SITE CHMOD ' + desiredPermission + ' ' + fileName))
-
-
-    def diff(self): # similar in function to GNU's diff
-        file1 = input("Enter first file: ")
-        file2 = input("Enter second file: ")
-        with open(file1) as file_1:
-            file_1_text = file_1.readlines()
-            
-        with open(file2) as file_2:
-            file_2_text = file_2.readlines()
-            
-        # find and print the diff:
-        for line in difflib.unified_diff(
-                file_1_text, file_2_text, fromfile=file1, 
-                tofile=file2, lineterm=''):
-            print(line)
-
-
-    def cat(self): # display contents of file 
-        fileName = input("Enter file you'd like to see contents of: ")
-        fileName = open(fileName, 'r')
-        content = fileName.read()
-        print(content)
-        fileName.close()
-
-
     def log_off(self):
         self.ftp.quit()
         print('You are now logged off')
 
-
-
-    def menu(self): 
-    # def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
-
-        # comment all this out and uncomment the line above this if you'd like to not be prompted every time 
-        loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
-
-        if (loadInfo == ""):
-            file_exists = os.path.exists('readme.txt')
-            if (file_exists == True):
-                loginInfo = self.load_info()
-                host = loginInfo[0]
-                user = loginInfo[1]
-                password = loginInfo[2]
-            else:
-                print("No such file found, please enter manually")
-                host = input('Enter hostname: ')
-                user = input('Enter username: ')
-                password = input('Enter password: ')
-                loginInfo = [host, user, password]
-        else:
-            host = input('Enter hostname: ')
-            user = input('Enter username: ')
-            password = input('Enter password: ')
-            loginInfo = [host, user, password]
-                
+    def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
+        # host = input('Enter hostname: ')
+        # user = input('Enter username: ')
+        # password = input('Enter password: ')
 
         options = {'0': self.list_directories_and_files,
                    '1': self.get_file,
@@ -269,16 +191,12 @@ class FTP_Client:
                    '5': self.put_file,
                    '6': self.create_dir,
                    '7': self.delete_file,
-                   '8': self.change_permission,
                    '9': self.copy_directories,
                    '10': self.delete_dir,
-                   '11': lambda: self.save_info(loginInfo), 
                    '12': self.rename_file_remote,
                    '13': self.rename_file_local,
                    '14': self.upload_multiple_files,
-                   '15': self.session_details_for_update,
-                   '16': self.diff,
-                   '17': self.cat,
+                   '15': self.session_details_for_update
                    }
 
         with FTP(host) as ftp:
@@ -301,16 +219,14 @@ class FTP_Client:
                 print('5: Put file onto remote server')
                 print('6: Create directory on remote server')
                 print('7: Delete file from remote server')
-                print('8: Change permissions on remove server')
+                # print('8: Change permissions on remove server')
                 print('9: Copy directories on remote server')
                 print('10: Delete directories on remote server')
-                print('11: Save connection information')
+                # print('11: Save connection information')
                 print('12: Rename file on remote server')
                 print('13: Rename local file')
                 print('14: Upload multiple files to remote server')
                 print('15: saving server details to file before update')
-                print('16: Return the difference (diff) between two files')
-                print('17: Print contents of file')
 
                 selection = input('\nPlease make a selection: ')
 
