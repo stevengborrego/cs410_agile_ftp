@@ -235,11 +235,18 @@ class FTP_Client:
         loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
 
         if (loadInfo == ""):
-            loginInfo = self.load_info()
-            host = loginInfo[0]
-            user = loginInfo[1]
-            password = loginInfo[2]
-            
+            file_exists = os.path.exists('readme.txt')
+            if (file_exists == True):
+                loginInfo = self.load_info()
+                host = loginInfo[0]
+                user = loginInfo[1]
+                password = loginInfo[2]
+            else:
+                print("No such file found, please enter manually")
+                host = input('Enter hostname: ')
+                user = input('Enter username: ')
+                password = input('Enter password: ')
+                loginInfo = [host, user, password]
         else:
             host = input('Enter hostname: ')
             user = input('Enter username: ')
