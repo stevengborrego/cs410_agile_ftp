@@ -1,16 +1,25 @@
+import ftplib
+from unittest import mock
 import unittest
-import ftp
-import mock
-from mock import patch
 
-class TestModule(unittest.TestCase):
-    def test_module(self):
-        pass
+from ftp import FTP_Client
 
-    # test that ftp.dir() is called
-    def test_list_directories_and_files(self):
-        pass
+
+class FTPTestCase(unittest.TestCase):
+    ftp = ftplib.FTP
+
+    @mock.patch('ftplib.open')
+    @mock.patch('ftplib.FTP')
+    def test_get_file_sucess(self, mockFtp, mOpen):
+        mockFtp.return_value = mock.Mock()
+        mockFtpObj = mockFtp()
+
+        mOpen.return_value = mock.Mock()
+
+        mockFtpObj.get_file(self, "test")
+        mockFtpObj.retrbinary.called
+        mOpen.called
+
 
 if __name__ == '__main__':
     unittest.main()
-
