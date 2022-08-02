@@ -23,7 +23,7 @@ class FTPTestCase(unittest.TestCase):
         
         ftp = FTP_Client(mockFtpObj)
         
-        ftp.get_file("test")
+        ftp._get_file("test")
         mockFtpObj.retrbinary.assert_called()
 
     @mock.patch('ftplib.FTP')
@@ -48,7 +48,7 @@ class FTPTestCase(unittest.TestCase):
 
         ftp = FTP_Client(mockFtpObj) 
         
-        ftp.put_file("test")
+        ftp._put_file("test")
         mockFtpObj.storbinary.assert_called()
 
     @mock.patch('ftplib.FTP')
@@ -58,7 +58,7 @@ class FTPTestCase(unittest.TestCase):
 
         ftp = FTP_Client(mockFtpObj) 
         
-        ftp.delete_file("test")
+        ftp._delete_file("test")
         mockFtpObj.delete.assert_called()
     
     @mock.patch('ftplib.FTP')
@@ -71,7 +71,7 @@ class FTPTestCase(unittest.TestCase):
         ftp.list_directories_and_files()
         mockFtpObj.dir.assert_called()
 
-    @mock.patch('os.listdir')
+    @mock.patch('os.dir')
     def test_list_local_directories_and_file_sucess(self, mockOs):
         mockOs.return_value = mock.Mock()
         mockOsObj = mockOs()
@@ -79,7 +79,7 @@ class FTPTestCase(unittest.TestCase):
         ftp = FTP_Client(mockOsObj)
 
         ftp.local_dir_and_files()
-        mockOsObj.listdir.called
+        mockOsObj.dir.called
 
 
     @mock.patch('ftplib.FTP')
@@ -89,7 +89,7 @@ class FTPTestCase(unittest.TestCase):
 
         ftp = FTP_Client(mockFtpObj)
         
-        ftp.create_dir("test")
+        ftp._create_dir("test")
 
         assert mockFtpObj.mkd.called
 
@@ -101,7 +101,7 @@ class FTPTestCase(unittest.TestCase):
 
         ftp = FTP_Client(mockFtpObj)
         
-        ftp.delete_dir("test")
+        ftp._delete_dir("test")
 
         assert mockFtpObj.rmd.called
 
@@ -112,7 +112,7 @@ class FTPTestCase(unittest.TestCase):
 
         ftp = FTP_Client(mockFtpObj)
         
-        ftp.copy_directories("test test1")
+        ftp._copy_directories("test test1")
 
         assert mockFtpObj.copy_dir.called
 

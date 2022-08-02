@@ -41,7 +41,7 @@ class FTP_Client:
         except:
             print('Please enter valid file path.')
 
-    def get_file(self, fileName):
+    def _get_file(self, fileName):
 
         localFile = open(fileName, 'wb')
         self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
@@ -81,7 +81,7 @@ class FTP_Client:
         except:
             print('Please enter a valid file path.')
 
-    def put_file(self, fileName):
+    def _put_file(self, fileName):
         try:
             self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
         except:
@@ -96,7 +96,7 @@ class FTP_Client:
         except:
             print('Please enter a valid directory path.')
 
-    def create_dir(self, dir):
+    def _create_dir(self, dir):
         try:
             self.ftp.mkd(dir)
         except:
@@ -111,7 +111,7 @@ class FTP_Client:
         except:
             print('Please enter a valid directory path.')
 
-    def delete_dir(self, dir):
+    def _delete_dir(self, dir):
         try:
             self.ftp.rmd(dir)
         except:
@@ -172,7 +172,7 @@ class FTP_Client:
         except:
             print('Please enter valid directory paths.')
 
-    def copy_directories(self, list):
+    def _copy_directories(self, list):
         try:
             directories = list.split(" ")
 
@@ -240,7 +240,7 @@ class FTP_Client:
         except:
             print('Please enter valid file path.')
 
-    def delete_file(self, fileName):
+    def _delete_file(self, fileName):
         try:
             print(self.ftp.delete(fileName))
         except:
@@ -282,30 +282,30 @@ class FTP_Client:
 
 
 
-    def menu(self): 
-    # def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
+    # def menu(self):
+    def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
 
-        # comment all this out and uncomment the line above this if you'd like to not be prompted every time 
-        loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
-
-        if (loadInfo == ""):
-            file_exists = os.path.exists('readme.txt')
-            if (file_exists == True):
-                loginInfo = self.load_info()
-                host = loginInfo[0]
-                user = loginInfo[1]
-                password = loginInfo[2]
-            else:
-                print("No such file found, please enter manually")
-                host = input('Enter hostname: ')
-                user = input('Enter username: ')
-                password = input('Enter password: ')
-                loginInfo = [host, user, password]
-        else:
-            host = input('Enter hostname: ')
-            user = input('Enter username: ')
-            password = input('Enter password: ')
-            loginInfo = [host, user, password]
+        # # comment all this out and uncomment the line above this if you'd like to not be prompted every time
+        # loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
+        #
+        # if (loadInfo == ""):
+        #     file_exists = os.path.exists('readme.txt')
+        #     if (file_exists == True):
+        #         loginInfo = self.load_info()
+        #         host = loginInfo[0]
+        #         user = loginInfo[1]
+        #         password = loginInfo[2]
+        #     else:
+        #         print("No such file found, please enter manually")
+        #         host = input('Enter hostname: ')
+        #         user = input('Enter username: ')
+        #         password = input('Enter password: ')
+        #         loginInfo = [host, user, password]
+        # else:
+        #     host = input('Enter hostname: ')
+        #     user = input('Enter username: ')
+        #     password = input('Enter password: ')
+        #     loginInfo = [host, user, password]
                 
 
         options = {'0': self.list_directories_and_files,
@@ -319,7 +319,6 @@ class FTP_Client:
                    '8': self.change_permission,
                    '9': self.copy_directories,
                    '10': self.delete_dir,
-                   '11': lambda: self.save_info(loginInfo), 
                    '12': self.rename_file_remote,
                    '13': self.rename_file_local,
                    '14': self.upload_multiple_files,
@@ -372,5 +371,5 @@ if __name__ == "__main__":
     print('CS 410/510 Agile - Group  Project')
     print('====================================================')
 
-    ftp = FTP_Client()
+    ftp = FTP_Client(ftp=None)
     ftp.menu()
