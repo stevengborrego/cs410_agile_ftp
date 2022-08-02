@@ -24,6 +24,9 @@ class FTP_Client:
     def __init__(self):
         self.ftp = None
 
+    def __init__(self, ftp):
+        self.ftp = ftp
+
     def list_directories_and_files(self):
         self.ftp.dir()
 
@@ -38,10 +41,27 @@ class FTP_Client:
         except:
             print('Please enter valid file path.')
 
+    def get_file(self, fileName):
+
+        localFile = open(fileName, 'wb')
+        self.ftp.retrbinary('RETR ' + fileName, localFile.write, 1024)
+
+        localFile.close()
+
     def get_mul_files(self):
         try:
             list = input("\nEnter files' name separated by space: ")
 
+            files = list.split(" ")
+
+            for file in files:
+                self.ftp.retrbinary("RETR "+file, open(file, 'wb').write)
+            self.ftp.close
+        except:
+            print('Please enter valid file paths.')
+
+    def get_mul_files(self, list):
+        try:
             files = list.split(" ")
 
             for file in files:
@@ -61,6 +81,12 @@ class FTP_Client:
         except:
             print('Please enter a valid file path.')
 
+    def put_file(self, fileName):
+        try:
+            self.ftp.storbinary('STOR '+fileName, open(fileName, 'rb'))
+        except:
+            print('Please enter a valid file path.')
+
     def create_dir(self):
         try:
             dir = input("\nEnter directory name to create: ")
@@ -70,12 +96,24 @@ class FTP_Client:
         except:
             print('Please enter a valid directory path.')
 
+    def create_dir(self, dir):
+        try:
+            self.ftp.mkd(dir)
+        except:
+            print('Please enter a valid directory path.')
+
     def delete_dir(self):
         try:
             dir = input("\nEnter directory name to delete: ")
             path = self.ftp.pwd()
 
             self.ftp.rmd(path + dir)
+        except:
+            print('Please enter a valid directory path.')
+
+    def delete_dir(self, dir):
+        try:
+            self.ftp.rmd(dir)
         except:
             print('Please enter a valid directory path.')
 
@@ -134,6 +172,16 @@ class FTP_Client:
         except:
             print('Please enter valid directory paths.')
 
+    def copy_directories(self, list):
+        try:
+            directories = list.split(" ")
+
+            for dir in directories:
+                self.ftp.copy_dir(dir)
+            self.ftp.close
+        except:
+            print('Please enter valid directory paths.')
+
     def rename_file_remote(self):
         try:
             fromName = input("Enter name of file you want to change: ")
@@ -188,6 +236,12 @@ class FTP_Client:
     def delete_file(self):
         try:
             fileName = input("Enter file name: ")
+            print(self.ftp.delete(fileName))
+        except:
+            print('Please enter valid file path.')
+
+    def delete_file(self, fileName):
+        try:
             print(self.ftp.delete(fileName))
         except:
             print('Please enter valid file path.')
