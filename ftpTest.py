@@ -79,7 +79,7 @@ class FTPTestCase(unittest.TestCase):
         ftp = FTP_Client(mockOsObj)
 
         ftp.local_dir_and_files()
-        mockOsObj.dir.called
+        mockOsObj.listdir.called
 
 
     @mock.patch('ftplib.FTP')

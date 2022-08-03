@@ -21,9 +21,6 @@ import difflib
 
 
 class FTP_Client:
-    def __init__(self):
-        self.ftp = None
-
     def __init__(self, ftp):
         self.ftp = ftp
 
