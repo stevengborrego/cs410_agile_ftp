@@ -10,6 +10,7 @@ Dawson Shay
 """
 
 from ftplib import FTP
+from re import A
 
 from numpy import append, array
 
@@ -23,6 +24,8 @@ import difflib
 class FTP_Client:
     def __init__(self, ftp):
         self.ftp = ftp
+    def passOS(self, os):
+        self.os = os
 
     def list_directories_and_files(self):
         self.ftp.dir()
@@ -57,7 +60,7 @@ class FTP_Client:
         except:
             print('Please enter valid file paths.')
 
-    def get_mul_files(self, list):
+    def _get_mul_files(self, list):
         try:
             files = list.split(" ")
 
@@ -69,6 +72,10 @@ class FTP_Client:
 
     def local_dir_and_files(self):
         files = os.listdir(os.curdir)
+        print (files)
+
+    def _local_dir_and_files(self):
+        files = self.os.listdir(os.curdir)
         print (files)
 
     def put_file(self):
@@ -187,11 +194,23 @@ class FTP_Client:
         except:
             print('Please enter valid file paths.')
 
+    def _rename_file_remote(self, fromName, toName):
+        try:
+            self.ftp.rename(fromName, toName)
+        except:
+            print('Please enter valid file paths.')
+
     def rename_file_local(self):
         try:
             fromName = input("Enter name of file you want to change: ")
             toName = input("Enter new name of file: ")
             os.rename(fromName, toName)
+        except:
+            print('Please enter valid file paths.')
+
+    def _rename_file_local(self, fromName, toName):
+        try:
+            self.os.rename(fromName, toName)
         except:
             print('Please enter valid file paths.')
 
@@ -204,6 +223,14 @@ class FTP_Client:
                 opened_file = open(dir + filename, 'rb')
                 self.ftp.storbinary('STOR '+ filename, opened_file)
                 opened_file.close()
+        except:
+            print('Please enter valid file paths.')
+    
+    def _upload_multiple_files(self, files):
+        try:
+            for filename in files:
+                #opened_file = open(dir + filename, 'rb')
+                self.ftp.storbinary('STOR '+ filename, filename)
         except:
             print('Please enter valid file paths.')
 
@@ -230,6 +257,26 @@ class FTP_Client:
                 )
         f.close()
 
+    def _session_details_for_update(self):
+        file = "session.txt"
+        f = open(file, "w")
+        count = 0
+        files = ""
+        ip = socket.gethostbyname("ftp.epizy.com")
+        session = ''
+        user = ''
+        port = ''
+        localtime = ''
+        mem = ''
+        f.write("Update in session, stats before the update : \n" + "IP address : " + ip + "\n" +
+                "Number of files in server : " + str(count) + "\n" +
+                "List of files in the server before this update : " + files + "\n" +
+                "User id : " + user + "\nServer Port : " + port + "\n" +
+                "Local time in the server : " + localtime + "\n" +
+                "Available memory : " + str(mem) + " Gb \n"
+                )
+        f.close()
+
     def delete_file(self):
         try:
             fileName = input("Enter file name: ")
@@ -247,11 +294,27 @@ class FTP_Client:
         fileName = input("Enter file name: ")
         desiredPermission = input("Enter desired permission: ")
         print(self.ftp.sendcmd('SITE CHMOD ' + desiredPermission + ' ' + fileName))
+    
+    def _change_permission(self, fileName, desiredPermission):
+        print(self.ftp.sendcmd('SITE CHMOD ' + desiredPermission + ' ' + fileName))
 
 
     def diff(self): # similar in function to GNU's diff
         file1 = input("Enter first file: ")
         file2 = input("Enter second file: ")
+        with open(file1) as file_1:
+            file_1_text = file_1.readlines()
+            
+        with open(file2) as file_2:
+            file_2_text = file_2.readlines()
+            
+        # find and print the diff:
+        for line in difflib.unified_diff(
+                file_1_text, file_2_text, fromfile=file1, 
+                tofile=file2, lineterm=''):
+            print(line)
+
+    def _diff(self, file1, file2): # For Unit test
         with open(file1) as file_1:
             file_1_text = file_1.readlines()
             
@@ -271,6 +334,13 @@ class FTP_Client:
         content = fileName.read()
         print(content)
         fileName.close()
+
+    def _cat(self, fileName): # For Unit test
+        fileName = open(fileName, 'r')
+        content = fileName.read()
+        print(content)
+        fileName.close()
+
 
 
     def log_off(self):
