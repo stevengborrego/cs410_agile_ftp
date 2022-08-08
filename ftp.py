@@ -345,7 +345,7 @@ class FTP_Client:
                 print('6: Create directory on remote server')
                 print('7: Delete file from remote server')
                 print('8: Change permissions on remove server')
-                print('9: Copy directories on remote server')
+                print('9: Download directories on remote server')
                 print('10: Delete directories on remote server')
                 print('11: Save connection information')
                 print('12: Rename file on remote server')
