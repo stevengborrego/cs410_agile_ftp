@@ -329,11 +329,14 @@ class FTP_Client:
 
 
     def cat(self): # display contents of file 
-        fileName = input("Enter file you'd like to see contents of: ")
-        fileName = open(fileName, 'r')
-        content = fileName.read()
-        print(content)
-        fileName.close()
+        try:
+            fileName = input("Enter file you'd like to see contents of: ")
+            fileName = open(fileName, 'r')
+            content = fileName.read()
+            print(content)
+            fileName.close()
+        except:
+            print('Please enter valid file name.')
 
     def _cat(self, fileName): # For Unit test
         fileName = open(fileName, 'r')
