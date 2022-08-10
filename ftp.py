@@ -220,8 +220,8 @@ class FTP_Client:
             files = os.listdir(dir)
             print(files)
             for filename in files:
-                opened_file = open(dir + filename, 'rb')
-                self.ftp.storbinary('STOR '+ filename, opened_file)
+                opened_file = open(dir + '/' + filename, 'rb')
+                self.ftp.storbinary('STOR ' + filename, opened_file)
                 opened_file.close()
         except:
             print('Please enter valid file paths.')
@@ -351,31 +351,33 @@ class FTP_Client:
         print('You are now logged off')
 
 
+# # login credentials
+# host: ftp.epizy.com
+# username: epiz_32073599
+# password: UMDmFiWWBp
 
-    # def menu(self):
-    def menu(self, host='ftp.epizy.com', user='epiz_32073599', password='UMDmFiWWBp'):
-
-        # # comment all this out and uncomment the line above this if you'd like to not be prompted every time
-        # loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
-        #
-        # if (loadInfo == ""):
-        #     file_exists = os.path.exists('readme.txt')
-        #     if (file_exists == True):
-        #         loginInfo = self.load_info()
-        #         host = loginInfo[0]
-        #         user = loginInfo[1]
-        #         password = loginInfo[2]
-        #     else:
-        #         print("No such file found, please enter manually")
-        #         host = input('Enter hostname: ')
-        #         user = input('Enter username: ')
-        #         password = input('Enter password: ')
-        #         loginInfo = [host, user, password]
-        # else:
-        #     host = input('Enter hostname: ')
-        #     user = input('Enter username: ')
-        #     password = input('Enter password: ')
-        #     loginInfo = [host, user, password]
+        
+    def menu(self):
+        loadInfo = input("Load connection info from file? [Press ENTER if YES, otherwise submit ANY KEY]: ")
+        
+        if (loadInfo == ""):
+            file_exists = os.path.exists('connect.txt')
+            if (file_exists == True):
+                loginInfo = self.load_info()
+                host = loginInfo[0]
+                user = loginInfo[1]
+                password = loginInfo[2]
+            else:
+                print("No such file found, please enter manually")
+                host = input('Enter hostname: ')
+                user = input('Enter username: ')
+                password = input('Enter password: ')
+                loginInfo = [host, user, password]
+        else:
+            host = input('Enter hostname: ')
+            user = input('Enter username: ')
+            password = input('Enter password: ')
+            loginInfo = [host, user, password]
                 
 
         options = {'0': self.list_directories_and_files,
@@ -389,6 +391,7 @@ class FTP_Client:
                    '8': self.change_permission,
                    '9': self.copy_directories,
                    '10': self.delete_dir,
+                   '11': lambda: self.save_info(loginInfo),
                    '12': self.rename_file_remote,
                    '13': self.rename_file_local,
                    '14': self.upload_multiple_files,
